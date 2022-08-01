@@ -1,0 +1,133 @@
+crafty(6)                                                                                                   crafty(6)
+
+NAME
+       crafty - chess engine
+
+SYNOPSIS
+       crafty [bookpath=<directory>] [logpath=<directory>]
+       [tbpath=<directory-list>]
+
+DESCRIPTION
+       Crafty  is a chess "engine".  That is, the program concerns itself with playing chess and not with providing a
+       graphic user interface.  Thus Crafty is commonly invoked indirectly via XBoard, and current versions of  these
+       programs generally work very well together.  Some noteworthy features of Crafty are:
+
+       *  Source  code, provided, is unusually deserving of study.  The author has sought to provide a starting point
+          for others writing chess-playing programs, leading to clean and portable code.  Another objective has  been
+          to  maintain  a  state-of-the-art  chess  engine, with the result that some parts of the source code may be
+          challenging to understand.
+
+       *  Flexible and powerful command-line interface.  About the only thing that can not be done within the CLI  is
+          changing  various  paths determining where Crafty reads and writes various files.  This manual page focuses
+          on explaining these paths.
+
+       *  Easy graphic user interface via xboard(6).
+
+       *  Informative log files.  Writes "game.nnn" file  storing  current  game  in  PGN  format,  and  also  writes
+          "log.nnn" file recording what the engine was "thinking".
+
+       *  Intelligent  opening play.  Crafty learns from experience, and makes appropriate modifications to its open‐
+          ing book.  The "book" command allows generation of an opening book (from PGN data),  and  customization  of
+          how  it  is  used.  The learning facilities synthesize several different approaches, and allow various ways
+          for the user to customize and follow what is being learned. Additional  commands  allow  easy  creation  of
+          files to customize how Crafty plays the opening against humans and against other computer programs.
+
+       *  Uses  endgame  tablebases.   Precompiled  tablebases in the appropriate format are freely downloadable from
+          ftp://ftp.cis.uab.edu/hyatt/TB.
+
+       *  Polished and powerful facilities for Internet play (for which  the  program  continues  to  be  extensively
+          used).   Note  that the licencing forbids concealing Crafty under another name, or unauthorized entry of it
+          in a tournament in which other computer programs have been invited to compete.
+
+       *  Annotation.  Generates either PGN or HTML files, in a manner made very flexible by choosing appropriate ap‐
+          tions to the "annotate | annotateh" command.
+
+OPTIONS
+       In  the  command line arguments, <directory-spec> is a path to a directory, whereas <directory-list> is a non-
+       empty sequence of paths to directories.  For portability, several different characters are taken as path sepa‐
+       rators: the colon (:), the semicolon (;), and the comma (,).
+
+       There  are  actually four of these: bookpath is where Crafty seeks its opening books and writes learned knowl‐
+       edge; logpath is where Crafty normally writes a pair of files "game.nnn" and "log.nnn" for each game it plays;
+       rcpath  is  where  Crafty  looks  for a run control file to be read only; and tbpath is where Crafty looks for
+       endgame tablebase files to be read only.
+
+       The four path specifications have a number of things in common:  each has a default value set when  Crafty  is
+       compiled,  which  can then be modified by the appropriate environment variable, and can then again be modified
+       by an invocation argument, but can not be modified after the engine has been initialized (thus, in particular,
+       it  is  not  possible  to  modify the paths by editing a run control file).  Possibly the best procedure is to
+       avoid the invocation options, experiment with the environment variables, and then perhaps recompile  the  pro‐
+       gram  with different defaults.  Note that if the program is compiled "out of the box" then all four values de‐
+       fault to "./" (the directory in which Crafty has been launched).
+
+       Crafty can be invoked with other arguments (such as "xboard" to indicate that Crafty is being invoked  through
+       xboard(6)) which would not usually be used directly.
+
+COMMANDS
+       Crafty's extensive command-line interface is defined in "option.c", discussed in "crafty.doc", and briefly de‐
+       scribed by the command "help".
+
+FILES
+   Run control
+       Crafty tries to read a run control file rcpath/.craftyrc.  (On  a  non-Unix  system,  ".craftyrc"  changes  to
+       "crafty.rc".)   Such  a  file  should  contain  a sequence of valid Crafty commands, terminated by the command
+       "exit" to restore standard input to the keyboard.  See craftyrc(5) for a skeletal example.
+
+   Logging
+       When a game is played, Crafty normally writes "logpath/game.<nnn>" and "logpath/log.<nnn>". Details of what is
+       written  are modifiable by the `log' command. Because $CRAFTY_LOG_DIR defaults to "./" (the directory in which
+       Crafty is launched), trouble can occur if the program is launched in a directory to  which  it  is  unable  to
+       write.   Note  that the "log.<nnn>" file normally contains all output that would be visible if Crafty were run
+       from the command line but is usually hidden when it is run from a GUI.
+
+   Opening books
+       Crafty is designed to maintain its chess opening knowledge in a file "book.bin", and to modify this file as it
+       learns from its mistakes.  Refer to the documentation for the "book" command for information on generating and
+       customizing usage of "book.bin".
+
+       Further, files "books.bin" and "bookc.bin" allow easy customization of Crafty's opening play  (against  humans
+       and computer, respectively).  See the documentation for the "books" command.
+
+       Finally, there are several files "*.lrn" for synopses of what Crafty has been learning.  See the documentation
+       for the "learn" command.
+
+   Endgame tablebases
+       When normally configured, Crafty reads late endgame knowledge from "*.emd" files, which  are  distance-to-mate
+       tablebases.  See the documentation for the "egtb" command.
+
+ENVIRONMENT VARIABLES
+   CRAFTY_BOOK_PATH
+       If  $CRAFTY_BOOK_PATH  is  set,  it overrides the compiled value of bookpath, the path to directory containing
+       "book.bin" and friends.  Unless learning has been disabled, Crafty will be writing in this directory.
+
+   CRAFTY_LOG_PATH
+       If $CRAFTY_LOG_PATH is set, it overrides the compiled value of logpath, the path to directory for writing, but
+       not reading, the log files.
+
+   CRAFTY_RC_PATH
+       If  $CRAFTY_RC_PATH  is set, it overrides the compiled value of rcpath, the path to directory for reading, but
+       not writing, a run control file (".craftyrc" or "crafty.rc").
+
+   CRAFTY_TB_PATH
+       If $CRAFTY_TB_PATH is set, it overrides the compiled value of tbpath, the sequence of paths to directories for
+       reading, but not writing, endgame tablebase files.
+
+SEE ALSO
+       craftyrc(5), xboard(6), /usr/share/doc/crafty
+
+HISTORY
+       Crafty  is  the son of Cray Blitz, also written by Bob Hyatt.  The subsequent history of Crafty is detailed in
+       the source file "main.c".  Opening books appeared in version 1.9. log files in  1.11,  endgame  tablebases  in
+       8.24, run control files in 9.22, and environment variables in 16.5.
+
+BUGS
+       In  the interests of portability, Crafty deals with files in a simple manner, at the cost of robustness.  Very
+       long or incorrect paths may result in a "segmentation fault" when a file writing operation fails.
+
+       This manual page itself will probably always be flagrantly incomplete in that many  essential,  powerful,  and
+       interesting aspects of Crafty are not even mentioned.
+
+AUTHOR
+       Robert Hyatt (hyatt@cis.uab.edu).
+
+Crafty 19.8                                       December 22, 2003                                         crafty(6)
