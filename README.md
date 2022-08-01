@@ -11,7 +11,7 @@ Crafty has been retired for some time, and may not be updated anymore.
 
 Downloads
 =========
-Many versions of Crafty can be downloaded here<https://craftychess.com/downloads/source/>.  
+Many versions of Crafty can be downloaded here <https://craftychess.com/downloads/source/>.  
 The version numbers are of the form major.minor.bugfix where there are very few "bugfix" 
 versions.  The most recent is always the highest major version, and within that major version, 
 the highest minor version.  Note that xx.2 is lower than xx.12.  These are source-only 
