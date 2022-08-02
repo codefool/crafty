@@ -1,3 +1,0 @@
-echo $1
-echo "<=new  >=old"
-diff $1 ../crafty-20.9/$1
