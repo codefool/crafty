@@ -1,0 +1,1 @@
+-kr -nbbo -saf -sai -saw -bad -br -brs -cdw -ce -i2 -l80 -lps -nut -sob -d1 -c1 -nfc1 -nfca -nhnl -npsl -v -d99 -ppi 2 -nlp
