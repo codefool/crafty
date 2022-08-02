@@ -3,7 +3,7 @@
 #include "chess.h"
 #include "data.h"
 
-/* last modified 05/29/98 */
+/* last modified 08/20/98 */
 /*
 ********************************************************************************
 *                                                                              *
@@ -63,12 +63,12 @@ int LookUp(TREE *tree, int ply, int depth, int wtm, int *alpha,
 */
   htable=((wtm)?trans_ref_wa:trans_ref_ba)+(((int) HashKey) & hash_maska);
 # if defined(SMP)
-  Lock(lock_hash);
+  Lock(lock_hasha);
 #endif
   word1=htable->word1;
   word2=htable->word2;
 # if defined(SMP)
-  UnLock(lock_hash);
+  UnLock(lock_hasha);
 #endif
   if (!Xor(And(word2,mask_80),temp_hash_key)) do {
 #if !defined(FAST)
@@ -80,7 +80,7 @@ int LookUp(TREE *tree, int ply, int depth, int wtm, int *alpha,
     val=(((int) Shiftr(word1,21)) & 01777777)-65536;
     *threat=((int) Shiftr(word1,58)) & 01;
     if ((type & UPPER_BOUND) &&
-        depth-NULL_MOVE_DEPTH-INCREMENT_PLY <= draft &&
+        depth-NULL_MOVE_DEPTH-INCPLY <= draft &&
         val < *beta) avoid_null=AVOID_NULL_MOVE;
     if (depth > draft) break;
 
@@ -109,12 +109,12 @@ int LookUp(TREE *tree, int ply, int depth, int wtm, int *alpha,
 
   htable=((wtm)?trans_ref_wb:trans_ref_bb)+(((int) HashKey) & hash_maskb);
 # if defined(SMP)
-  Lock(lock_hash);
+  Lock(lock_hashb);
 #endif
   word1=htable->word1;
   word2=htable->word2;
 # if defined(SMP)
-  UnLock(lock_hash);
+  UnLock(lock_hashb);
 #endif
   if (!Xor(And(word2,mask_80),temp_hash_key)) {
 #if !defined(FAST)
@@ -127,7 +127,7 @@ int LookUp(TREE *tree, int ply, int depth, int wtm, int *alpha,
     val=(((int) Shiftr(word1,21)) & 01777777)-65536;
     *threat=((int) Shiftr(word1,58)) & 01;
     if ((type & UPPER_BOUND) &&
-        depth-NULL_MOVE_DEPTH-INCREMENT_PLY <= draft &&
+        depth-NULL_MOVE_DEPTH-INCPLY <= draft &&
         val < *beta) avoid_null=AVOID_NULL_MOVE;
     if (depth > draft) return(avoid_null);
 
